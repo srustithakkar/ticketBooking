@@ -1,33 +1,36 @@
 const container= document.querySelector(".container")
 const seat = document.querySelector(".seat")
+const moviePrice = document.getElementById("movie");
+let ticketPrice  = document.getElementById("movie").value = "10"
 let totalSeat = [];
 
-function totalSeatValue(id){
-  if(totalSeat.includes(id)){
-    totalSeat.pop(id);
-  }
-  else {
-    totalSeat.push(id)
-  }
+// eventListener for container and dropdown
+container.addEventListener("click", seatCount);
+movie.addEventListener("change", function(e){
+  ticketPrice = e.target.value;
+  calculateValue(totalSeat, ticketPrice);
+});
+
+//  calculate Movie Price
+function calculateValue(totalSeat, ticketPrice){
+  document.getElementById("price").innerHTML = ticketPrice;
+  document.getElementById("count").innerHTML = totalSeat.length;
+  const total = totalSeat.length * ticketPrice
+  document.getElementById("total").innerHTML = total;
 }
 
-function onMovieChange(value){
-  console.log(value)
-  seatStatus()
-}
-
-function seatStatus (e) {
-  if(e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
-    e.target.classList.toggle('selected');
-    totalSeatValue(e.target.id)
-    let seats = totalSeat.length;
-    document.getElementById("count").innerHTML = seats;
-    let movies = document.getElementById("movie")
-    const price = movies.value  
-    document.getElementById("price").innerHTML = price;
-    document.getElementById("total").innerHTML = price * seats;
+// seat Count & changing the style
+function seatCount(e){
+  if(e.target.classList.contains('selected')){
+    e.target.classList.remove('selected');
+    totalSeat.pop(e.target.id);
+    calculateValue(totalSeat, ticketPrice);
   }
-}
-
-
-container.addEventListener("click", seatStatus)
+  else{
+    if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
+      e.target.classList.add('selected');
+      totalSeat.push(e.target.id);
+      calculateValue(totalSeat, ticketPrice);
+    }
+  }
+} 
